@@ -16,8 +16,8 @@
 
         <input type="file" class="image-input" accept="image/*" onchange="splitImage()" />
         <div class="settings">
-          <label>Rows: <input type="number" id="rows" value="1" min="1" oninput="splitImage()" /></label>
-          <label>Cols: <input type="number" id="cols" value="2" min="1" oninput="splitImage()" /></label>
+          <label>Rows: <input type="number" class="row-input" value="1" onfocus="select(this)" oninput="clampInput(event); splitImage()" /></label>
+          <label>Cols: <input type="number" class="column-input" value="2" onfocus="select(this)" oninput="clampInput(event); splitImage()" /></label>
         </div>
       </div>
 

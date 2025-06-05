@@ -1,5 +1,8 @@
 const imageInput = document.querySelector(".image-input");
-let currentFile = null
+const rowInput = document.querySelector(".row-input");
+const columnInput = document.querySelector(".column-input");
+
+let currentFile = null;
 
 window.addEventListener("error", (event) => {
   const error = `${event.type}: ${event.message}`;
@@ -7,32 +10,47 @@ window.addEventListener("error", (event) => {
   alert(error);
 });
 
-async function splitImage() {
-  const file = imageInput.files[0] || currentFile
-  if (!file) return;
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
 
-  currentFile = file
-  
+function clampInput(event) {
+  if (!event.target.value) return
+  const value = parseInt(event.target.value)
+  event.target.value = clamp(value, 1, 5);
+}
+
+function select(element) {
+  element.select()
+}
+
+async function splitImage() {
+  const file = imageInput.files[0] || currentFile;
+  if (!file || !rowInput.value || !columnInput.value) return;
+
+  const rows = rowInput.value
+  const columns = columnInput.value
+
+  currentFile = file;
+
   const nameParts = file.name.match(/(.*?)(\.[^.]+)$/);
   const imageFileName = nameParts ? nameParts[1] : "slice";
   const imageExtension = nameParts ? nameParts[2] : ".png";
 
   const imageEl = await createImageEl(file);
 
-  const rows = parseInt(document.getElementById("rows").value);
-  const cols = parseInt(document.getElementById("cols").value);
   const preview = document.getElementById("preview");
   preview.innerHTML = "";
 
   const width = imageEl.width;
   const height = imageEl.height;
-  const sliceWidth = width / cols;
+  const sliceWidth = width / columns;
   const sliceHeight = height / rows;
 
   let index = 2;
 
   for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
+    for (let col = 0; col < columns; col++) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       canvas.width = sliceWidth;
@@ -62,7 +80,7 @@ async function createImageEl(file) {
 
     imageEl.src = dataUrl;
   } else {
-    imageEl.src = file
+    imageEl.src = file;
   }
 
   return imageEl;
