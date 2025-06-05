@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Splitter</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body class="dark-theme">
+    <div class="app container">
+      <div class="header">
+        <h1>Image Splitter</h1>
+
+        <input type="file" id="imageInput" accept="image/*" onchange="splitImage(event.target.files[0])" />
+        <div class="settings">
+          <label>Rows: <input type="number" id="rows" value="1" min="1" /></label>
+          <label>Cols: <input type="number" id="cols" value="2" min="1" /></label>
+        </div>
+      </div>
+
+      <div class="preview" id="preview"></div>
+    </div>
+  </body>
+</html>
