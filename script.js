@@ -1,12 +1,18 @@
+const imageInput = document.querySelector(".image-input");
+let currentFile = null
+
 window.addEventListener("error", (event) => {
   const error = `${event.type}: ${event.message}`;
   console.error(error);
   alert(error);
 });
 
-async function splitImage(file) {
-  if (!file) return
+async function splitImage() {
+  const file = imageInput.files[0] || currentFile
+  if (!file) return;
 
+  currentFile = file
+  
   const nameParts = file.name.match(/(.*?)(\.[^.]+)$/);
   const imageFileName = nameParts ? nameParts[1] : "slice";
   const imageExtension = nameParts ? nameParts[2] : ".png";
@@ -44,15 +50,20 @@ async function splitImage(file) {
 }
 
 async function createImageEl(file) {
-  const dataUrl = await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => resolve(event.target.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-
   const imageEl = new Image();
-  imageEl.src = dataUrl;
+
+  if (file instanceof File) {
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    imageEl.src = dataUrl;
+  } else {
+    imageEl.src = file
+  }
 
   return imageEl;
 }

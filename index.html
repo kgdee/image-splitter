@@ -14,10 +14,10 @@
       <div class="header">
         <h1>Image Splitter</h1>
 
-        <input type="file" id="imageInput" accept="image/*" onchange="splitImage(event.target.files[0])" />
+        <input type="file" class="image-input" accept="image/*" onchange="splitImage()" />
         <div class="settings">
-          <label>Rows: <input type="number" id="rows" value="1" min="1" /></label>
-          <label>Cols: <input type="number" id="cols" value="2" min="1" /></label>
+          <label>Rows: <input type="number" id="rows" value="1" min="1" oninput="splitImage()" /></label>
+          <label>Cols: <input type="number" id="cols" value="2" min="1" oninput="splitImage()" /></label>
         </div>
       </div>
 
