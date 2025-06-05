@@ -1,6 +1,8 @@
 const imageInput = document.querySelector(".image-input");
 const rowInput = document.querySelector(".row-input");
 const columnInput = document.querySelector(".column-input");
+const preview = document.querySelector(".preview");
+const loadingScreen = document.querySelector(".loading-screen")
 
 let currentFile = null;
 
@@ -28,6 +30,7 @@ async function splitImage() {
   const file = imageInput.files[0] || currentFile;
   if (!file || !rowInput.value || !columnInput.value) return;
 
+  toggleLoading(true)
   const rows = rowInput.value
   const columns = columnInput.value
 
@@ -39,9 +42,6 @@ async function splitImage() {
 
   const imageEl = await createImageEl(file);
 
-  const preview = document.getElementById("preview");
-  preview.innerHTML = "";
-
   const width = imageEl.width;
   const height = imageEl.height;
   const sliceWidth = width / columns;
@@ -49,6 +49,7 @@ async function splitImage() {
 
   let index = 2;
 
+  preview.innerHTML = "";
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < columns; col++) {
       const canvas = document.createElement("canvas");
@@ -58,13 +59,15 @@ async function splitImage() {
 
       ctx.drawImage(imageEl, col * sliceWidth, row * sliceHeight, sliceWidth, sliceHeight, 0, 0, sliceWidth, sliceHeight);
 
-      const link = document.createElement("a");
-      link.download = `${imageFileName} (${index++})${imageExtension}`;
-      link.href = canvas.toDataURL();
-      link.appendChild(canvas);
-      preview.appendChild(link);
+      preview.innerHTML += `
+        <a class="item" href="${canvas.toDataURL()}" download="${imageFileName} (${index++})${imageExtension}">
+          <img src="${canvas.toDataURL()}" />
+        </a>
+      `
     }
   }
+
+  toggleLoading(false)
 }
 
 async function createImageEl(file) {
@@ -84,4 +87,8 @@ async function createImageEl(file) {
   }
 
   return imageEl;
+}
+
+function toggleLoading(force = false) {
+  loadingScreen.classList.toggle("hidden", !force)
 }
