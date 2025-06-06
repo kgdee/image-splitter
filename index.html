@@ -16,15 +16,15 @@
 
         <input type="file" class="image-input" accept="image/*" onchange="splitImage()" />
         <div class="settings">
-          <label>Rows: <input type="number" class="row-input" value="1" onfocus="select(this)" oninput="clampInput(event); splitImage()" /></label>
-          <label>Cols: <input type="number" class="column-input" value="2" onfocus="select(this)" oninput="clampInput(event); splitImage()" /></label>
+          <label>Rows: <input type="number" class="row-input" value="1" onfocus="this.select()" oninput="handleNumberInput(event)" /></label>
+          <label>Cols: <input type="number" class="column-input" value="2" onfocus="this.select()" oninput="handleNumberInput(event)" /></label>
         </div>
       </div>
 
       <div class="preview"></div>
 
-      <div class="loading-screen overlay hidden">
-
+      <div class="loading-screen overlay hidden" onclick="event.stopPropagation()">
+        <div class="loader"></div>
       </div>
     </div>
   </body>

@@ -2,9 +2,11 @@ const imageInput = document.querySelector(".image-input");
 const rowInput = document.querySelector(".row-input");
 const columnInput = document.querySelector(".column-input");
 const preview = document.querySelector(".preview");
-const loadingScreen = document.querySelector(".loading-screen")
+const loadingScreen = document.querySelector(".loading-screen");
 
 let currentFile = null;
+let currentRows = rowInput.value;
+let currentColumns = columnInput.value;
 
 window.addEventListener("error", (event) => {
   const error = `${event.type}: ${event.message}`;
@@ -16,23 +18,26 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function clampInput(event) {
-  if (!event.target.value) return
-  const value = parseInt(event.target.value)
+function handleNumberInput(event) {
+  if (!event.target.value) return;
+  const value = parseInt(event.target.value);
   event.target.value = clamp(value, 1, 5);
-}
+  event.target.blur();
 
-function select(element) {
-  element.select()
+  splitImage();
 }
 
 async function splitImage() {
   const file = imageInput.files[0] || currentFile;
   if (!file || !rowInput.value || !columnInput.value) return;
+  if (file === currentFile && rowInput.value === currentRows && columnInput.value === currentColumns) return
 
-  toggleLoading(true)
-  const rows = rowInput.value
-  const columns = columnInput.value
+  setLoading(true);
+
+  const rows = rowInput.value;
+  const columns = columnInput.value;
+  currentRows = rows
+  currentColumns = columns
 
   currentFile = file;
 
@@ -63,11 +68,11 @@ async function splitImage() {
         <a class="item" href="${canvas.toDataURL()}" download="${imageFileName} (${index++})${imageExtension}">
           <img src="${canvas.toDataURL()}" />
         </a>
-      `
+      `;
     }
   }
 
-  toggleLoading(false)
+  setLoading(false);
 }
 
 async function createImageEl(file) {
@@ -89,6 +94,6 @@ async function createImageEl(file) {
   return imageEl;
 }
 
-function toggleLoading(force = false) {
-  loadingScreen.classList.toggle("hidden", !force)
+function setLoading(state = false) {
+  loadingScreen.classList.toggle("hidden", !state);
 }

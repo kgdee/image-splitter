@@ -11,6 +11,7 @@
   --red: #f44336;
   --green: #4caf50;
   --blue: #3f51b5;
+  --lightblue: #2196f3;
 }
 
 .dark-theme {
@@ -92,12 +93,8 @@ textarea {
   overflow: hidden;
 }
 
-.bg-red {
-  background-color: var(--red);
-}
-
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -115,7 +112,7 @@ textarea {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding: 25px 0;
+  padding: 25px 10px;
 }
 
 .header {
@@ -148,7 +145,28 @@ textarea {
 }
 
 .loading-screen {
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-screen .loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #e0e0e0;
+  border-top: 6px solid var(--lightblue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Medium screens (Tablets, up to 768px wide) */
@@ -160,6 +178,10 @@ textarea {
 
 /* Small screens (Phones, up to 480px wide) */
 @media (max-width: 480px) {
+  .app {
+    padding: 10px;
+  }
+
   .preview {
     grid-template-columns: 1fr;
   }
